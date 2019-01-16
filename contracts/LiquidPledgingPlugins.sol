@@ -112,5 +112,7 @@ contract LiquidPledgingPlugins is AragonApp, LiquidPledgingStorage {
     // we provide a pure function here to satisfy the ILiquidPledging interface
     // the compiler will generate this function for public constant variables, but will not 
     // recognize that the interface has been satisfied and thus will not generate the bytecode
-    function PLUGIN_MANAGER_ROLE() external pure returns (bytes32) { return _PLUGIN_MANAGER_ROLE; }
+    function PLUGIN_MANAGER_ROLE() external pure returns (bytes32) {
+        return _PLUGIN_MANAGER_ROLE;
+    }
 }

@@ -188,10 +188,18 @@ contract LPVault is ILPVault, AragonApp {
     // we provide a pure function here to satisfy the ILPVault interface
     // the compiler will generate this function for public constant variables, but will not 
     // recognize that the interface has been satisfied and thus will not generate the bytecode
-    function CONFIRM_PAYMENT_ROLE() external pure returns (bytes32) { return _CONFIRM_PAYMENT_ROLE; }
-    function CANCEL_PAYMENT_ROLE() external pure returns (bytes32) { return _CANCEL_PAYMENT_ROLE; }
-    function SET_AUTOPAY_ROLE() external pure returns (bytes32) { return _SET_AUTOPAY_ROLE; }
-    function ESCAPE_HATCH_CALLER_ROLE() external pure returns (bytes32) { return _ESCAPE_HATCH_CALLER_ROLE; }
+    function CONFIRM_PAYMENT_ROLE() external pure returns (bytes32) { 
+        return _CONFIRM_PAYMENT_ROLE;
+    }
+    function CANCEL_PAYMENT_ROLE() external pure returns (bytes32) { 
+        return _CANCEL_PAYMENT_ROLE;
+    }
+    function SET_AUTOPAY_ROLE() external pure returns (bytes32) {
+        return _SET_AUTOPAY_ROLE;
+    }
+    function ESCAPE_HATCH_CALLER_ROLE() external pure returns (bytes32) {
+        return _ESCAPE_HATCH_CALLER_ROLE;
+    }
 
     /// @notice Transfers ETH according to the data held within the specified
     ///  payment id (internal function)

@@ -1,7 +1,6 @@
 {
   "contracts": [
-    "contracts/**",
-    "./node_modules/@aragon/os/contracts/{kernel/Kernel.sol,acl/ACL.sol,apps/AppProxyUpgradeable.sol,factory/DAOFactory.sol}"
+    "contracts/**"
   ],
   "app": {},
   "buildDir": "dist/",
