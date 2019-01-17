@@ -46,9 +46,11 @@ module.exports = async () => {
 
   const vaultAddress = r.events.DeployVault.returnValues.vault;
   vault = LPVault.at(vaultAddress);
+  embark.track(vault.$contract);
 
   const lpAddress = r.events.DeployLiquidPledging.returnValues.liquidPledging;
   liquidPledging = LiquidPledgingMock.at(lpAddress);
+  embark.track(liquidPledging.$contract);
 
   const liquidPledgingState = new LiquidPledgingState(liquidPledging);
 

@@ -41,29 +41,28 @@ describe('LPVault test', function() {
 
   it('Should setup LPVault contract', async function() {
     // set permissions
-    const kernel = Kernel.at(await liquidPledging.kernel());
-    acl = ACL.at(await kernel.acl());
+    const kernel = Kernel.at(await liquidPledging.$contract.methods.kernel().call());
+    acl = ACL.at(await kernel.$contract.methods.acl().call());
     await acl.createPermission(
       accounts[0],
       vault.$address,
-      await vault.CANCEL_PAYMENT_ROLE(),
+      await vault.$contract.methods.CANCEL_PAYMENT_ROLE().call(),
       accounts[0],
       { $extraGas: 200000 },
     );
     await acl.createPermission(
       accounts[0],
       vault.$address,
-      await vault.CONFIRM_PAYMENT_ROLE(),
+      await vault.$contract.methods.CONFIRM_PAYMENT_ROLE().call(),
       accounts[0],
       { $extraGas: 200000 },
     );
     await acl.grantPermission(
       escapeHatchCaller,
       vault.$address,
-      await vault.ESCAPE_HATCH_CALLER_ROLE(),
+      await vault.$contract.methods.ESCAPE_HATCH_CALLER_ROLE().call(),
       { $extraGas: 200000 },
     );
-
     await liquidPledging.addGiver('Giver1', '', 0, '0x0000000000000000000000000000000000000000', {
       from: giver1,
       $extraGas: 100000,
@@ -81,7 +80,7 @@ describe('LPVault test', function() {
       },
     );
 
-    const nAdmins = await liquidPledging.numberOfPledgeAdmins();
+    const nAdmins = await liquidPledging.$contract.methods.numberOfPledgeAdmins().call();
     assert.equal(nAdmins, 2);
   });
 
@@ -91,7 +90,7 @@ describe('LPVault test', function() {
       $extraGas: 100000,
     });
 
-    const balance = await token.balanceOf(vault.$address);
+    const balance = await token.$contract.methods.balanceOf(vault.$address).call();
     assert.equal(10000, balance);
   });
 
@@ -103,7 +102,7 @@ describe('LPVault test', function() {
     await acl.grantPermissionP(
       restrictedPaymentsConfirmer,
       vault.$address,
-      await vault.CONFIRM_PAYMENT_ROLE(),
+      await vault.$contract.methods.CONFIRM_PAYMENT_ROLE().call(),
       ['0x010600000000000000000000000000000000000000000000000000000000012c'],
       { $extraGas: 200000 },
     );
@@ -113,19 +112,19 @@ describe('LPVault test', function() {
   });
 
   it('Only escapeHatchCaller role should be able to pull "escapeHatch"', async function() {
-    const preVaultBalance = await token.balanceOf(vault.$address);
+    const preVaultBalance = await token.$contract.methods.balanceOf(vault.$address).call();
 
     // transferToVault is a bit confusing, but is the name of the function in aragonOs
     // this is the escapeHatch and will transfer all funds to the recoveryVault
     await assertFail(vault.transferToVault(token.$address, { from: vaultOwner, gas: 6700000 }));
-    assert.equal(await token.balanceOf(vault.$address), preVaultBalance);
+    assert.equal(await token.$contract.methods.balanceOf(vault.$address).call(), preVaultBalance);
 
     await vault.transferToVault(token.$address, { from: escapeHatchCaller, $extraGas: 100000 });
 
-    const vaultBalance = await token.balanceOf(vault.$address);
+    const vaultBalance = await token.$contract.methods.balanceOf(vault.$address).call();
     assert.equal(0, vaultBalance);
 
-    const recoveryVaultBalance = await token.balanceOf(recoveryVault);
+    const recoveryVaultBalance = await token.$contract.methods.balanceOf(recoveryVault).call();
     assert.equal(preVaultBalance, recoveryVaultBalance);
   });
 });

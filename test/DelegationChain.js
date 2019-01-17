@@ -88,7 +88,7 @@ describe('DelegationChain test', function() {
       { from: giver2 },
     ); // pledgeAdmin 6
 
-    const nAdmins = await liquidPledging.numberOfPledgeAdmins();
+    const nAdmins = await liquidPledging.$contract.methods.numberOfPledgeAdmins().call();
     assert.equal(nAdmins, 6);
   });
 
@@ -170,13 +170,13 @@ describe('DelegationChain test', function() {
     // propose the delegation
     await liquidPledging.transfer(2, 2, 1000, 5, { from: delegate1, $extraGas: 200000 });
 
-    const origPledge = await liquidPledging.getPledge(2);
+    const origPledge = await liquidPledging.$contract.methods.getPledge(2).call();
     assert.equal(origPledge.amount, '0');
 
     // veto the delegation
     await liquidPledging.transfer(1, 5, 1000, 2, { from: giver1, $extraGas: 200000 });
 
-    const currentPledge = await liquidPledging.getPledge(2);
+    const currentPledge = await liquidPledging.$contract.methods.getPledge(2).call();
 
     assert.equal(currentPledge.amount, '1000');
     assert.equal(currentPledge.nDelegates, 1);
@@ -193,7 +193,7 @@ describe('DelegationChain test', function() {
     // propose project delegation
     await liquidPledging.transfer(3, 3, 1000, 5, { from: delegate2 });
 
-    const pledge = await liquidPledging.getPledge(8);
+    const pledge = await liquidPledging.$contract.methods.getPledge(8).call();
     assert.equal(pledge.commitTime, now + 259200); // 259200 is longest commitTime in delegationChain
   });
 
@@ -215,7 +215,7 @@ describe('DelegationChain test', function() {
     // owner veto delegation to project1 and remove delegate2
     await liquidPledging.transfer(1, 8, 1000, 2, { from: giver1, $extraGas: 200000 });
 
-    const pledge = await liquidPledging.getPledge(2);
+    const pledge = await liquidPledging.$contract.methods.getPledge(2).call();
     assert.equal(pledge.amount, 1000);
   });
 
@@ -225,13 +225,13 @@ describe('DelegationChain test', function() {
     // owner veto delegation to project1 and assign new delgate
     await liquidPledging.transfer(1, 9, 1000, 3, { from: giver1, $extraGas: 200000 });
 
-    const pledge = await liquidPledging.getPledge(10);
+    const pledge = await liquidPledging.$contract.methods.getPledge(10).call();
     assert.equal(pledge.amount, 1000);
     assert.equal(pledge.nDelegates, 1);
 
     // owner assign new delegate w/o vetoing intendedProject
     await liquidPledging.transfer(1, 10, 1000, 2, { from: giver1, $extraGas: 100000 });
-    const pledge2 = await liquidPledging.getPledge(2);
+    const pledge2 = await liquidPledging.$contract.methods.getPledge(2).call();
     assert.equal(pledge2.amount, 1000);
   });
 });

@@ -47,17 +47,16 @@ describe('LiquidPledging cancelPledge normal scenario', function() {
     );
     await liquidPledging.addGiverAndDonate(1, token.$address, 1000, { from: giver1 });
 
-    const nAdmins = await liquidPledging.numberOfPledgeAdmins();
+    const nAdmins = await liquidPledging.$contract.methods.numberOfPledgeAdmins().call();
     assert.equal(nAdmins, 2);
   });
 
   it('Should only allow pledge owner to cancel pledge', async () => {
-    await assertFail(liquidPledging.cancelPledge(2, 1000, { from: giver1, gas: 4000000 }));
+    await assertFail(liquidPledging.cancelPledge(2, 1000, { from: giver1, $extraGas: 200000 }));
   });
 
   it('Should cancel pledge and return to oldPledge', async () => {
     await liquidPledging.cancelPledge(2, 1000, { from: adminProject1, $extraGas: 200000 });
-
     const st = await liquidPledgingState.getState();
 
     assert.equal(st.pledges[1].amount, 1000);
@@ -65,6 +64,6 @@ describe('LiquidPledging cancelPledge normal scenario', function() {
   });
 
   it('Should not allow to cancel pledge if oldPledge === 0', async () => {
-    await assertFail(liquidPledging.cancelPledge(1, 1000, { from: giver1, gas: 4000000 }));
+    await assertFail(liquidPledging.cancelPledge(1, 1000, { from: giver1, $extraGas: 200000 }));
   });
 });

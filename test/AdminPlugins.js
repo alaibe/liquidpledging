@@ -39,7 +39,7 @@ describe('LiquidPledging plugins test', function() {
       from: adminProject1,
     });
 
-    const nAdmins = await liquidPledging.numberOfPledgeAdmins();
+    const nAdmins = await liquidPledging.$contract.methods.numberOfPledgeAdmins().call();
     assert.equal(nAdmins, 1);
   });
 
@@ -74,13 +74,12 @@ describe('LiquidPledging plugins test', function() {
 
     // deploy new plugin
     const factoryContract = await TestSimpleProjectPluginFactory.new({ from: adminProject1 });
-
+    embark.track(factoryContract.$contract);
     await factoryContract.deploy(liquidPledging.$address, 'SimplePlugin1', '', 0, {
-      from: adminProject1,
-      gas: 5000000,
+      from: adminProject1
     });
 
-    const nAdmins = await liquidPledging.numberOfPledgeAdmins();
+    const nAdmins = await liquidPledging.$contract.methods.numberOfPledgeAdmins().call();
     assert.equal(nAdmins, 2);
   });
 
@@ -89,7 +88,7 @@ describe('LiquidPledging plugins test', function() {
 
     await liquidPledging.addGiver('Giver2', '', 0, vault.$address, { from: giver1 });
 
-    const nAdmins = await liquidPledging.numberOfPledgeAdmins();
+    const nAdmins = await liquidPledging.$contract.methods.numberOfPledgeAdmins().call();
     assert.equal(nAdmins, 3);
   });
 });

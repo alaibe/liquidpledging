@@ -4,8 +4,7 @@ module.exports = function(liquidPledging) {
       delegates: [],
     };
 
-    return liquidPledging
-      .getPledge(idPledge)
+    return liquidPledging.$contract.methods.getPledge(idPledge).call()
       .then(res => {
         pledge.amount = res.amount;
         pledge.owner = res.owner;
@@ -31,7 +30,7 @@ module.exports = function(liquidPledging) {
         const promises = [];
         for (let i = 1; i <= res.nDelegates; i += 1) {
           promises.push(
-            liquidPledging.getPledgeDelegate(idPledge, i).then(r => ({
+            liquidPledging.$contract.methods.getPledgeDelegate(idPledge, i).call().then(r => ({
               id: r.idDelegate,
               addr: r.addr,
               name: r.name,
@@ -50,7 +49,7 @@ module.exports = function(liquidPledging) {
 
   function getAdmin(idAdmin) {
     const admin = {};
-    return liquidPledging.getPledgeAdmin(idAdmin).then(res => {
+    return liquidPledging.$contract.methods.getPledgeAdmin(idAdmin).call().then(res => {
       if (res.adminType === '0') {
         admin.type = 'Giver';
       } else if (res.adminType === '1') {
@@ -75,7 +74,7 @@ module.exports = function(liquidPledging) {
   return {
     getState() {
       const getPledges = () =>
-        liquidPledging.numberOfPledges().then(nPledges => {
+        liquidPledging.$contract.methods.numberOfPledges().call().then(nPledges => {
           const promises = [];
           for (let i = 1; i <= nPledges; i += 1) {
             promises.push(getPledge(i));
@@ -84,7 +83,7 @@ module.exports = function(liquidPledging) {
         });
 
       const getAdmins = () =>
-        liquidPledging.numberOfPledgeAdmins().then(nAdmins => {
+        liquidPledging.$contract.methods.numberOfPledgeAdmins().call().then(nAdmins => {
           const promises = [];
           for (let i = 1; i <= nAdmins; i += 1) {
             promises.push(getAdmin(i));

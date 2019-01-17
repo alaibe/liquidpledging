@@ -53,7 +53,7 @@ describe('NormalizePledge test', function() {
     }); // pledgeAdmin 5
     await liquidPledging.addGiver('Giver2', 'URLGiver2', 0, '0x0000000000000000000000000000000000000000', { from: giver2 }); // pledgeAdmin 6
 
-    const nAdmins = await liquidPledging.numberOfPledgeAdmins();
+    const nAdmins = await liquidPledging.$contract.methods.numberOfPledgeAdmins().call();
     assert.equal(nAdmins, 6);
   });
 
