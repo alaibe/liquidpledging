@@ -94,7 +94,7 @@ describe('LiquidPledging test', function() {
 
     giver1Token = StandardTokenTest;
     giver2Token = await StandardTokenTest.new();
-    embark.track(giver2Token.$contract);
+    embark.track(giver2Token.$abi, giver2Token.$address);
 
     await giver1Token.mint(giver1, web3.utils.toWei('1000'));
     await giver2Token.mint(giver2, web3.utils.toWei('1000'));

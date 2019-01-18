@@ -74,7 +74,8 @@ describe('LiquidPledging plugins test', function() {
 
     // deploy new plugin
     const factoryContract = await TestSimpleProjectPluginFactory.new({ from: adminProject1 });
-    embark.track(factoryContract.$contract);
+    embark.track(factoryContract.$abi, factoryContract.$address);
+
     await factoryContract.deploy(liquidPledging.$address, 'SimplePlugin1', '', 0, {
       from: adminProject1
     });
