@@ -13,12 +13,16 @@ config(
       LPVault: {},
       LiquidPledgingMock: {},
       Kernel: {
+        file: "./node_modules/@aragon/os/contracts/kernel/Kernel.sol",
         args: {
           _shouldPetrify: 'false',
         },
       },
-      ACL: {},
+      ACL: {
+        file: "./node_modules/@aragon/os/contracts/acl/ACL.sol",
+      },
       DAOFactory: {
+        file: "./node_modules/@aragon/os/contracts/factory/DAOFactory.sol",
         args: ['$Kernel', '$ACL', '0x0000000000000000000000000000000000000000'],
       },
       LPFactory: {
